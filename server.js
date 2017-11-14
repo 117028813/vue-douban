@@ -1,11 +1,8 @@
 const express = require('express')
 const superagent = require('superagent')
-// const async = require('async')
 const app = express()
-// app.use(express.static('./'))
 
 app.get('/list', function (req, res) {
-  // let recommend_feeds
   console.log(req.query.next_date)
   let next_date = req.query.next_date || ''
   res.set({
@@ -16,14 +13,22 @@ app.get('/list', function (req, res) {
       if (err) {
         console.log('获取数据出错')
       }
-      
-      // res.send(response.body)
       recommend_feeds = response.body.recommend_feeds
       console.log(recommend_feeds)
-      // let cover_urls = []
-      let count = 0;
+      let count = 0
+      let countLayout5 = 0
+      let countMorePicTotal = 0
       for (let i = 0; i < recommend_feeds.length; i++) {
-        // cover_urls[i] = recommend_feeds[i].target.cover_url
+        if (recommend_feeds[i].layout === 5) {
+          countLayout5++
+          let morePicUrls = recommend_feeds[i].target.more_pic_urls
+          for (let j = 0; j < morePicUrls.length; j++) {
+            superagent.get(morePicUrls[j]).end((err, response1) => {
+              morePicUrls[j] = response1.body.toString('base64')
+              countMorePicTotal++
+            })
+          }
+        }
         if (!recommend_feeds[i].target.cover_url) {
           count++;
           continue;
@@ -31,25 +36,13 @@ app.get('/list', function (req, res) {
         superagent.get(recommend_feeds[i].target.cover_url).end((err, response2) => {
           recommend_feeds[i].target.cover_url = response2.body.toString('base64')
           count++;
-          if (count === recommend_feeds.length) {
+          if (count === recommend_feeds.length && countLayout5 * 2 === countMorePicTotal) {
             console.log('done')
             res.send(recommend_feeds)
           }
         })
-      }
-      // console.log(cover_urls)
-      // async.mapLimit(recommend_feeds, 3, function (item) {
-      //   superagent.get(item.target.cover_url).end(function (err, response2) {
-      //     // console.log(response2.body.toString('base64'))
-      //     item.target.cover_url = response2.body.toString('base64')
-      //   })
-      // }, function (err, results) {
-      //   res.send(response.body)
-      // })
-      
+      }      
     })
-  
-  
 })
 
 app.listen(3000, function () {
