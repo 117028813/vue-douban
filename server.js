@@ -1,6 +1,7 @@
 const express = require('express')
 const superagent = require('superagent')
 const app = express()
+const fs = require('fs')
 
 app.get('/list', function (req, res) {
   console.log(req.query.next_date)
@@ -12,6 +13,10 @@ app.get('/list', function (req, res) {
     .end(function (err, response) {
       if (err) {
         console.log('获取数据出错')
+        fs.readFile('./data.txt', 'utf-8', (err, data) => {
+          res.send(data)
+        })
+        return;
       }
       recommend_feeds = response.body.recommend_feeds
       console.log(recommend_feeds)
@@ -39,6 +44,10 @@ app.get('/list', function (req, res) {
           if (count === recommend_feeds.length && countLayout5 * 2 === countMorePicTotal) {
             console.log('done')
             res.send(recommend_feeds)
+            fs.writeFile('./data.txt', JSON.stringify(recommend_feeds), err => {
+              if (err) throw err
+              console.log('File saved!')
+            })
           }
         })
       }      
