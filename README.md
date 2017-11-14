@@ -1,18 +1,19 @@
-# vue-toutiao
+# vue-douban
 
-> A Vue.js project
+用vue做的豆瓣首页，后台数据是用superagent从豆瓣服务器抓取过来的，数据取过来后会保存到data.txt中。
+前端列表滚动到底会继续请求数据。
 
-## Build Setup
+## 如何运行
 
-``` bash
-# install dependencies
+```
+git clone https://github.com/117028813/vue-douban.git
+
+cd vue-douban
+
 npm install
 
-# serve with hot reload at localhost:8080
+node server.js
+
+// 再打开一个终端
 npm run dev
-
-# build for production with minification
-npm run build
 ```
-
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
