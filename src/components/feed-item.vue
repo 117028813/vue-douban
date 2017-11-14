@@ -1,8 +1,8 @@
 <template>
   <a href="javascript:void(0)" class="feed-item">
     <div class="feed-content">
-      <!-- <div class="img" :style="imgStyle" v-if="recommendFeed.target.cover_url"></div> -->
-      <img class="img" :src="recommendFeed.target.cover_url" v-if="recommendFeed.target.cover_url">
+      <div class="img" :style="imgStyle" v-if="recommendFeed.target.cover_url"></div>
+      <!-- <img class="img" :src="recommendFeed.target.cover_url" v-if="recommendFeed.target.cover_url"> -->
       <h3>{{recommendFeed.title}}</h3>
       <p>{{recommendFeed.target.desc}}</p>
     </div>
@@ -20,9 +20,9 @@ export default {
   props: ['recommendFeed'],
   data() {
     return {
-      // imgStyle: {
-      //   background: `url(${this.recommendFeed.target.cover_url}) center center / cover no-repeat`
-      // }
+      imgStyle: {
+        background: `url(data:image/png;base64,${this.recommendFeed.target.cover_url}) center center / cover no-repeat`
+      }
     }
   },
   created() {

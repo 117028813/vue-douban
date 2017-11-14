@@ -28,11 +28,11 @@ export default {
   },
   created() {
     const that = this;
-    axios.get('http://192.168.1.103:3000/list')
+    axios.get('http://localhost:3000/list')
       .then(function (response) {
         // 在这里用this指向的不是vue instance
-        that.recommendFeeds = response.data.recommend_feeds
-        console.log(that.recommendFeeds.length)
+        console.log(response)
+        that.recommendFeeds = response.data
       })
   },
   updated() {
@@ -46,10 +46,9 @@ export default {
     window.onscroll = function () {
       if (this.scrollY + window.innerHeight + 60 >= appHeight) {
         appHeight += 500
-        axios.get(`http://192.168.1.103:3000/list?next_date=${that.next_date}`)
+        axios.get(`http://localhost:3000/list?next_date=${that.next_date}`)
           .then(function (response) {
-            that.recommendFeeds = that.recommendFeeds.concat(response.data.recommend_feeds)
-            console.log(getDate(new Date(new Date(that.next_date).getTime() - 24*60*60*1000)))
+            that.recommendFeeds = that.recommendFeeds.concat(response.data)
             that.next_date = getDate(new Date(new Date(that.next_date).getTime() - 24*60*60*1000))
           })
       }

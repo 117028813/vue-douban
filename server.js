@@ -17,13 +17,26 @@ app.get('/list', function (req, res) {
         console.log('获取数据出错')
       }
       
-      res.send(response.body)
-
-      // recommend_feeds = response.body.recommend_feeds
+      // res.send(response.body)
+      recommend_feeds = response.body.recommend_feeds
+      console.log(recommend_feeds)
       // let cover_urls = []
-      // for (let i = 0; i < recommend_feeds.length; i++) {
-      //   cover_urls[i] = recommend_feeds[i].target.cover_url
-      // }
+      let count = 0;
+      for (let i = 0; i < recommend_feeds.length; i++) {
+        // cover_urls[i] = recommend_feeds[i].target.cover_url
+        if (!recommend_feeds[i].target.cover_url) {
+          count++;
+          continue;
+        }
+        superagent.get(recommend_feeds[i].target.cover_url).end((err, response2) => {
+          recommend_feeds[i].target.cover_url = response2.body.toString('base64')
+          count++;
+          if (count === recommend_feeds.length) {
+            console.log('done')
+            res.send(recommend_feeds)
+          }
+        })
+      }
       // console.log(cover_urls)
       // async.mapLimit(recommend_feeds, 3, function (item) {
       //   superagent.get(item.target.cover_url).end(function (err, response2) {
@@ -40,5 +53,5 @@ app.get('/list', function (req, res) {
 })
 
 app.listen(3000, function () {
-  console.log('http://192.168.1.103:3000/')
+  console.log('http://localhost:3000/')
 })
