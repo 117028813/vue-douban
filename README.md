@@ -5,6 +5,8 @@
 
 另外还有react版本的：https://github.com/117028813/react-douban
 
+另外还有angular版本的：https://github.com/117028813/angular-douban
+
 ## 如何运行
 
 ```
